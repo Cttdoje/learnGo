@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"learnGo/retriever/mock"
 	"learnGo/retriever/real"
-	"time"
 )
 
 type Retriever interface {
@@ -21,15 +20,24 @@ type RetrieverPoster interface {
 	Poster
 }
 
+const url = "http://www.91mika.com"
+
 func download(r Retriever) string {
-	return r.Get("http://www.91mika.com")
+	return r.Get(url)
 }
 
 func post(p Poster) {
-	p.Post("http://www.91mika.com", map[string]string{
+	p.Post(url, map[string]string{
 		"name":   "cttdoje",
 		"course": "golang",
 	})
+}
+
+func session(s RetrieverPoster) string {
+	s.Post(url, map[string]string{
+		"contents": "another...",
+	})
+	return s.Get(url)
 }
 
 //判断实现类型
@@ -43,19 +51,20 @@ func inspect(r Retriever) {
 }
 
 func main() {
-	var r Retriever
-	r = mock.Retriever{"hello cttdoje"}
-	r = &real.Retriever{
+	var r RetrieverPoster
+	r = &mock.Retriever{"hello cttdoje"}
+	/*r = &real.Retriever{
 		UserAgent: "Mozilla/5.0",
 		TimeOut:   time.Minute,
-	}
+	}*/
 	fmt.Printf("%T %v\n", r, r)
 	//fmt.Println(download(r))
+	fmt.Println(session(r))
 
-	inspect(r)
+	//inspect(r)
 
 	// Type assertion
-	realRetriever := r.(*real.Retriever)
-	fmt.Println(realRetriever.TimeOut)
+	/*realRetriever := r.(*real.Retriever)
+	fmt.Println(realRetriever.TimeOut)*/
 
 }
