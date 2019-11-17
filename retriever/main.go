@@ -43,7 +43,7 @@ func session(s RetrieverPoster) string {
 //判断实现类型
 func inspect(r Retriever) {
 	switch valueType := r.(type) {
-	case mock.Retriever:
+	case *mock.Retriever:
 		fmt.Println("contents:", valueType.Contents)
 	case *real.Retriever:
 		fmt.Println("userAgent", valueType.UserAgent)
@@ -51,20 +51,19 @@ func inspect(r Retriever) {
 }
 
 func main() {
-	var r RetrieverPoster
-	r = &mock.Retriever{"hello cttdoje"}
+	//var r RetrieverPoster
+	//r = &mock.Retriever{"hello cttdoje"}
 	/*r = &real.Retriever{
 		UserAgent: "Mozilla/5.0",
 		TimeOut:   time.Minute,
-	}*/
+	}
 	fmt.Printf("%T %v\n", r, r)
-	//fmt.Println(download(r))
+	fmt.Println(download(r))
 	fmt.Println(session(r))
-
-	//inspect(r)
+	inspect(r)
 
 	// Type assertion
-	/*realRetriever := r.(*real.Retriever)
+	realRetriever := r.(*real.Retriever)
 	fmt.Println(realRetriever.TimeOut)*/
 
 }
